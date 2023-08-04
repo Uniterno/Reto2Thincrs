@@ -231,7 +231,6 @@ def delete_card():
     except ValueError:
         print("User could not be deleted!")
 
-
 def menu_cards():
     menu_functions = {
         1: add_card,

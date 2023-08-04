@@ -69,6 +69,7 @@ def update_user_name():
     except ValueError:
         print("User could not be updated!")
 
+
 def update_user_age():
     name = input("Please input the user name to update: ")
     try:
@@ -88,11 +89,21 @@ def update_user_age():
 
 
 def delete_user():
-    pass
+    name = input("Please input the user name to delete: ")
+    try:
+        user = UserController.get_user_by_name(name=name)
+        if user is not None:
+            print("Successfully found user!")
 
+            try:
+                UserController.delete_user(user=user)
+            except ValueError:
+                print("Couldn't delete user!")
+        else:
+            print("Couldn't find an user with that name!")
 
-def back():
-    pass
+    except ValueError:
+        print("User could not be deleted!")
 
 
 def menu_user():
@@ -101,8 +112,7 @@ def menu_user():
         2: read_user,
         3: update_user_name,
         4: update_user_age,
-        5: delete_user,
-        6: back
+        5: delete_user
     }
 
     while True:
@@ -120,18 +130,60 @@ def menu_user():
             choice = int(choice)
             if choice in menu_functions:
                 menu_functions[choice]()
+            elif choice == 6:
+                break
             else:
                 print("Invalid choice. Please try again.")
         except ValueError:
             print("Invalid input. Please enter a number (1-5).")
 
 
+def add_card():
+    pass
+
+
+def update_card():
+    pass
+
+
+def delete_card():
+    pass
+
+
+def menu_cards():
+    menu_functions = {
+        1: add_card,
+        2: update_card,
+        3: delete_card
+    }
+
+    while True:
+        print("\n===== MANAGE CARD =====")
+        print("1. Create new card")
+        print("2. Update card")
+        print("3. Delete card ")
+        print("4. Go back")
+        print("================")
+        choice = input("Enter your choice (1-4): ")
+
+        try:
+            choice = int(choice)
+            if choice in menu_functions:
+                menu_functions[choice]()
+            elif choice == 4:
+                break
+            else:
+                print("Invalid choice. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter a number (1-4).")
+
+
 def manage_users():
     menu_user()
 
 
-def option_two():
-    print("You selected Option 2.")
+def manage_cards():
+    menu_cards()
 
 
 def option_three():
@@ -146,18 +198,18 @@ def quit_program():
 def show_menu():
     print("\n===== MENU =====")
     print("1. Manage Users")
-    print("2. Manage Accounts")
-    print("3. Option 3")
-    print("4. Quit")
+    print("2. Manage Cards")
+    print("3. Make Charge")
+    print("4. Fund Account")
     print("================")
 
 
 def main():
     menu_functions = {
         1: manage_users,
-        2: option_two,
-        3: option_three,
-        4: quit_program
+        2: manage_cards,
+        3: make_charge,
+        4: fund_account
     }
 
     while True:

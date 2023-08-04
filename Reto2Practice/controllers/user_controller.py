@@ -19,7 +19,10 @@ class UserController:
 
     @staticmethod
     def get_user_by_name(name: str) -> User:
-        return User.get(name=name)
+        try:
+            return User.get(name=name)
+        except User.DoesNotExist:
+            return None
 
     # Update
     @staticmethod

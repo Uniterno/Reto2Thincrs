@@ -1,29 +1,54 @@
-import datetime
 from db.migrations import create_db
-from controllers.user_controller import UserController
-from controllers.account_controller import AccountController
-from controllers.card_controller import CardController
 
-from schemas.account import Account
-from schemas.card import Card
-from schemas.user import User
 
-if __name__ == '__main__':
+def option_one():
+    print("You selected Option 1.")
+
+
+def option_two():
+    print("You selected Option 2.")
+
+
+def option_three():
+    print("You selected Option 3.")
+
+
+def quit_program():
+    print("Exiting the program.")
+    exit()
+
+
+def show_menu():
+    print("\n===== MENU =====")
+    print("1. Option 1")
+    print("2. Option 2")
+    print("3. Option 3")
+    print("4. Quit")
+    print("================")
+
+
+def main():
+    menu_functions = {
+        1: option_one,
+        2: option_two,
+        3: option_three,
+        4: quit_program
+    }
+
+    while True:
+        show_menu()
+        choice = input("Enter your choice (1-4): ")
+
+        try:
+            choice = int(choice)
+            if choice in menu_functions:
+                menu_functions[choice]()
+            else:
+                print("Invalid choice. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter a number (1-4).")
+
+
+if __name__ == "__main__":
     create_db('./db/db_oltp.db')
-
-    user = UserController.create_user(age=60, name='Juan Gomez')
-
-    account = AccountController.create_account(user=user,
-                                               balance=0,
-                                               open_date=datetime.datetime.now(),
-                                               limit=50000)
-    card = CardController.create_card(account=account, user=user, cvv='123')
-
-    for i in Account.select():
-        print(i.id, i.user_id, i.balance, i.open_date, i.limit)
-
-    for i in User.select():
-        print(i.id, i.age, i.name)
-
-    for i in Card.select():
-        print(i.id, i.account_id, i.name, i.cvv)
+    main()

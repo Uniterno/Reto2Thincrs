@@ -30,6 +30,13 @@ class UserController:
         user.name = name
         user.save()
         return user
+    
+    # Update
+    @staticmethod
+    def update_age(user: User, age: int) -> User:
+        user.age = age
+        user.save()
+        return user
 
     # Delete
     @staticmethod

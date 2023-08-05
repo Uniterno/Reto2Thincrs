@@ -1,11 +1,11 @@
 from peewee import *
-from schemas.card import Card
+from schemas.account import Account
 
 db = SqliteDatabase('./db/db_oltp.db', timeout=10)
 
 
 class Payment(Model):
-    card_id = ForeignKeyField(Card, backref='charges')
+    account_id = ForeignKeyField(Account, backref='payment')
     date_time = DateField()
     amount = FloatField()
 

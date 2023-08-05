@@ -273,10 +273,31 @@ def manage_cards():
 
 
 def make_charge():
-    pass
+    print("You're about to make a charge, please input the user name to proceed.")
+    name = input("Name: ")
+    try:
+        user = UserController.get_user_by_name(name=name)
+        if user is not None:
+            account = AccountController.get_account_by_user(user=user)
+            if account is not None:
+                card = CardController.get_card_by_account(account=account)
+                print("-- Card found --")
+                print("Name: ", card.name)
+                amount = float(input("Please select the amount to charge:"))
+                input_cvv = input("Please confirm your CVV:")
+                if input_cvv == card.cvv:
+                    ChargeController.receive_charge(card=card, date_time=datetime.datetime.now(), amount=amount)
+                    print("Charge added")
+                else:
+                    print("Sorry, CVV entered doesn't match")
+        else:
+            print("This user doesn't exist!")
+
+    except RuntimeError:
+        print("An unexpected error has occurred!")
 
 
-def fund_account():
+def make_payment():
     print("You're about to make a payment, please input the user name to proceed.")
     name = input("Name: ")
     try:
@@ -290,11 +311,9 @@ def fund_account():
                 print("Limit: ", account.limit)
                 amount = float(input("Payment amount: "))
                 if AccountController.update_balance(account=account, amount=amount):
-                    try:
-                        PaymentController.make_payment(account=account, date_time=datetime.datetime.now(), amount=amount)
-                        print("Payment successful!")
-                    except peewee.IntegrityError:
-                        print("This account has no associated cards")
+                    PaymentController.make_payment(account=account, date_time=datetime.datetime.now(), amount=amount)
+                    print("Payment successful!")
+
                 else:
                     print("An error has occurred processing your payment. Please verify your balance and limit")
         else:
@@ -351,7 +370,7 @@ def main():
         1: manage_users,
         2: manage_cards,
         3: make_charge,
-        4: fund_account,
+        4: make_payment,
         5: update_account_limit,
         6: quit_program
     }

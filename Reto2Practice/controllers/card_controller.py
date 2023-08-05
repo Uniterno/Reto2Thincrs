@@ -23,9 +23,15 @@ class CardController:
     @staticmethod
     def get_card_by_account(account: Account) -> Union[Card, None]:
         try:
-            return Card.filter(account_id=account.id)
+            return Card.get(account_id=account.id)
         except Card.DoesNotExist:
             return None
+
+    @staticmethod
+    def update_cvv(card: Card, cvv: str) -> Card:
+        card.cvv = cvv
+        card.save()
+        return card
 
     # Delete
     @staticmethod

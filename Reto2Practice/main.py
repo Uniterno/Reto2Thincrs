@@ -142,30 +142,113 @@ def menu_user():
 
 
 def add_card():
-    pass
+    print("You are creating a new card, please fill in the required info...")
+    user_name = input("User Name: ")
+    try:
+        user = UserController.get_user_by_name(name=user_name)
+        if user is not None:
+            user_account = AccountController.get_account_by_user(user=user)
+            if user_account is not None:
+                cvv = input("CVV: ")
+                new_card = CardController.create_card(account=user_account, user=user, cvv=cvv)
+                print(new_card.name)
+                print("Card has been created successfully")
+            else:
+                print("Couldn't find an account for the user")
+        else:
+            print("Couldn't find an user with that name!")
+    except ValueError:
+        print("User could not be created!")
 
 
-def update_card():
-    pass
+def read_card():
+    user_name = input("Please input the card's user name: ")
+    try:
+        user = UserController.get_user_by_name(name=user_name)
+        if user is not None:
+            user_account = AccountController.get_account_by_user(user=user)
+            if user_account is not None:
+                card = CardController.get_card_by_account(account=user_account)
+                if card:
+                    print("-- Associated card --")
+                    print("Name: ", card.name)
+                    print("CVV not shown for security reasons")
+                else:
+                    print("Couldn't find a card for that account")
+            else:
+                print("Couldn't find an account for the user")
+        else:
+            print("Couldn't find an user with that name!")
+
+    except ValueError:
+        print("User could not be created!")
+
+
+def update_card_cvv():
+    card_user_name = input("Please input the card's user name: ")
+    try:
+        user = UserController.get_user_by_name(name=card_user_name)
+        if user is not None:
+            user_account = AccountController.get_account_by_user(user=user)
+            if user_account is not None:
+                card = CardController.get_card_by_account(account=user_account)
+                if card:
+                    print("-- Card found --")
+                    print("Name: ", card.name)
+                    old_cvv = input("Enter you actual cvv")
+                    if old_cvv == card.cvv:
+                        new_cvv = input("Enter your new cvv")
+                        updated_card = CardController.update_cvv(card, new_cvv)
+                        print("CVV updated successfully")
+                    else:
+                        print("Sorry, CVV entered doesn't match")
+                else:
+                    print("Couldn't find a card for that account")
+            else:
+                print("Couldn't find an account for the user")
+        else:
+            print("Couldn't find an user with that name!")
+
+    except ValueError:
+        print("User could not be created!")
 
 
 def delete_card():
-    pass
+    user_name = input("Please input the user of the card you want to delete: ")
+    try:
+        user = UserController.get_user_by_name(name=user_name)
+        if user is not None:
+            user_account = AccountController.get_account_by_user(user=user)
+            if user_account is not None:
+                card = CardController.get_card_by_account(account=user_account)
+                if card:
+                    CardController.delete_card(card=card)
+                    print("Card deleted successfully")
+                else:
+                    print("Couldn't find a card for that account")
+            else:
+                print("Couldn't find an account for the user")
+        else:
+            print("Couldn't find an user with that name!")
 
+    except ValueError:
+        print("User could not be deleted!")
 
 def menu_cards():
     menu_functions = {
         1: add_card,
-        2: update_card,
-        3: delete_card
+        2: read_card,
+        3: update_card_cvv,
+        4: delete_card
     }
 
     while True:
         print("\n===== MANAGE CARD =====")
         print("1. Create new card")
-        print("2. Update card")
-        print("3. Delete card ")
-        print("4. Go back")
+        print("2. Search card")
+        print("3. Update card CVV")
+        print("4. Delete card ")
+        print("5. Go back")
         print("================")
         choice = input("Enter your choice (1-4): ")
 
@@ -173,7 +256,7 @@ def menu_cards():
             choice = int(choice)
             if choice in menu_functions:
                 menu_functions[choice]()
-            elif choice == 4:
+            elif choice == 5:
                 break
             else:
                 print("Invalid choice. Please try again.")

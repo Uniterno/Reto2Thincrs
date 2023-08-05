@@ -18,7 +18,7 @@ class PaymentController:
             account_id = account.id
             payment = Payment(account_id=account_id, date_time=date_time, amount=amount)
             payment.save()
-            print(f"Charge successfully made to account: {account_id}")
+            print(f"Payment successfully made for account: {account_id}")
             return payment
         else:
             print("Payment failed")

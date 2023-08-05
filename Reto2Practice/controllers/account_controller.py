@@ -40,8 +40,9 @@ class AccountController:
     def update_balance(account, amount) -> bool:
         balance = account.balance + amount
         limit = account.limit
-        # if balance <= limit:
-        if balance > -limit:
+        # if balance > -limit:
+        if balance <= limit:
+
             account.balance = balance
             account.save()
             return True
@@ -50,12 +51,14 @@ class AccountController:
             return False
 
     @staticmethod
-    def update_limit(account: Account, limit: int):
+    def update_limit(account: Account, limit: float) -> bool:
         if limit > 0:
             account.limit = limit
             account.save()
+            return True
         else:
             print("Limit must be positive")
+            return False
 
     # Delete
     @staticmethod
